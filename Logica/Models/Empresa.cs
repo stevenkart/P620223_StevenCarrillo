@@ -31,7 +31,15 @@ namespace Logica.Models
         {
             DataTable R = new DataTable();
 
-            //TODO: hay que programar la llamada al SP que retorna datos
+
+            Conexion MiCnn = new Conexion();
+
+            // paso 2.3 y 2.4 
+            //No es necesario documentar o explicar los pasos dentro de la ejecucion del proceso en la
+            //programacion ya que como se va a usar tantas veces no se veria bien explicarlos
+
+            R = MiCnn.EjecutarSelect("SPEmpresasListar");
+
             return R;
         }
 

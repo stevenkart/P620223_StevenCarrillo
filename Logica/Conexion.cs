@@ -94,7 +94,7 @@ namespace Logica
             return Retorno;
         }
 
-        public Object EjecutarConRetornoEscalar(string NombreSP)
+        public Object EjecutarConRetornoEscalar(string NombreSP) // cuando una tabla devuelve el ID
         {
             Object Retorno = null;
 
@@ -123,7 +123,7 @@ namespace Logica
         //una instancia nueva de la clase.
         public Conexion()
         {
-            this.CadenaDeConexion = ConfigurationManager.ConnectionStrings["CNNSTR"].ToString();
+            this.CadenaDeConexion = ConfigurationManager.ConnectionStrings["CnnStr"].ToString();
         }
 
     }
