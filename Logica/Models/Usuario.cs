@@ -65,12 +65,8 @@ namespace Logica.Models
             if (Resultado > 0)
             {
                 R = true;
-                MessageBox.Show("Usuario Creado Correctamente!", "Agregar Usuario");
+                
 
-            }
-            else
-            {
-                MessageBox.Show("Usuario no se pudo crear!", "Agregar Usuario");
             }
 
             return R;
@@ -83,17 +79,93 @@ namespace Logica.Models
             // TODO sale bien
             bool R = false;
 
+            Conexion MiCnn = new Conexion();
+            //debemos pasar la lista parametros para el insert
+
+            MiCnn.ListaParametros.Add(new SqlParameter("@Nombre", this.Nombre));
+            MiCnn.ListaParametros.Add(new SqlParameter("@Cedula", this.Cedula));
+            MiCnn.ListaParametros.Add(new SqlParameter("@NombreUsuario", this.NombreUsuario));
+
+            //TODO: SE DEBE ENCRIPTAR CONTRASENNIA
+            MiCnn.ListaParametros.Add(new SqlParameter("@Contrasennia", this.Contrasennia));
+            MiCnn.ListaParametros.Add(new SqlParameter("@Email", this.Email));
+
+            //PARAMETROS PARA LOS FK, NORMALMENTE SON DE OBJETOS COMPUESTOS DE LA CLASE
+            MiCnn.ListaParametros.Add(new SqlParameter("@IDUsuarioRol", this.MiUsuarioRol.IDUsuarioRol));
+            MiCnn.ListaParametros.Add(new SqlParameter("@IDEmpresa", this.MiEmpresa.IDEmpresa));
+
+            //ID USUARIO
+            MiCnn.ListaParametros.Add(new SqlParameter("@IDUsuario", this.IDUsuario));
+
+            //ahora se llama el SP 
+
+            int Resultado = MiCnn.EjecutarUpdateDeleteInsert("SPUsuarioModificar");
+
+            if (Resultado > 0)
+            {
+                R = true;
+
+
+            }
+
+
+
             return R;
 
         }
         public bool Eliminar()
         {
-            //TODO: ejecutar SP que contenga la instruccion
+   
             //DELETE -> UPDATE correspondiente y retornar TRUE si 
-            // TODO sale bien
             // SE HACEN ELIMINACIONES LOGICAS, LO QUE HAREMOS SERA CAMBIAR EL VALOR DE CAMPO 
             //ACTIVO A FALSE
             bool R = false;
+
+            Conexion MiCnn = new Conexion();
+            //debemos pasar la lista parametros para el insert
+
+            //ID USUARIO
+            MiCnn.ListaParametros.Add(new SqlParameter("@IDUsuario", this.IDUsuario));
+
+            //ahora se llama el SP 
+
+            int Resultado = MiCnn.EjecutarUpdateDeleteInsert("SPUsuarioEliminar");
+
+            if (Resultado > 0)
+            {
+                R = true;
+
+
+            }
+
+            return R;
+
+        }
+
+        public bool Activar()
+        {
+
+            //ACTIVATE -> UPDATE correspondiente y retornar TRUE si 
+            // SE HACEN ACTIVACIONES LOGICAS, LO QUE HAREMOS SERA CAMBIAR EL VALOR DE CAMPO 
+            //ACTIVO A TRUE
+            bool R = false;
+
+            Conexion MiCnn = new Conexion();
+            //debemos pasar la lista parametros para el insert
+
+            //ID USUARIO
+            MiCnn.ListaParametros.Add(new SqlParameter("@IDUsuario", this.IDUsuario));
+
+            //ahora se llama el SP 
+
+            int Resultado = MiCnn.EjecutarUpdateDeleteInsert("SPUsuarioActivar");
+
+            if (Resultado > 0)
+            {
+                R = true;
+
+
+            }
 
             return R;
 
@@ -107,13 +179,64 @@ namespace Logica.Models
             Usuario R = new Usuario();
 
 
+            Conexion MyCnn = new Conexion();
 
+            MyCnn.ListaParametros.Add(new SqlParameter("@ID", this.IDUsuario));
+            DataTable dataUsuario = new DataTable();
+            dataUsuario = MyCnn.EjecutarSelect("SPUsuarioConsultarPorID");
+
+            //Una vez tewnemos un datatable con la data procedemos a llenar las propiedades del 
+            //objeto retorno
+
+            if (dataUsuario != null && dataUsuario.Rows.Count > 0)
+            {
+
+                DataRow Fila = dataUsuario.Rows[0];
+
+                R.IDUsuario = Convert.ToInt32(Fila["IDUsuario"]);
+                R.Nombre = Convert.ToString(Fila["Nombre"]);
+                R.Cedula = Convert.ToString(Fila["Cedula"]);
+                R.NombreUsuario = Convert.ToString(Fila["NombreUsuario"]);
+                R.Contrasennia = String.Empty;
+                R.Email = Convert.ToString(Fila["Email"]);
+                R.MiUsuarioRol.IDUsuarioRol = Convert.ToInt32(Fila["IDUsuarioRol"]);
+                R.MiEmpresa.IDEmpresa = Convert.ToInt32(Fila["IDEmpresa"]);
+                R.Activo = Convert.ToBoolean(Fila["Activo"]);
+
+
+            }
 
 
 
             return R;
 
         }
+
+        public bool ConsultarPorID(int pIDUsuario)
+        {
+            //TODO: ejecutar SP que contenga la instruccion
+            //SELECT correspondiente y retornar del mismo tipo de la clase
+            // TODO sale bien entregue un select
+            bool R = false;
+
+
+            Conexion MyCnn = new Conexion();
+
+            MyCnn.ListaParametros.Add(new SqlParameter("@ID", pIDUsuario));
+            DataTable dataUsuario = new DataTable();
+            dataUsuario = MyCnn.EjecutarSelect("SPUsuarioConsultarPorID");
+
+
+            if (dataUsuario != null && dataUsuario.Rows.Count > 0)
+            {
+                R = true;
+
+            }
+
+            return R;
+
+        }
+
         public bool ConsultarPorCedula()
         {
             //TODO: ejecutar SP que contenga la instruccion
@@ -202,22 +325,22 @@ namespace Logica.Models
         }
 
         //listar con el bool sin parametros
-        public DataTable ListarActivos()
+        public DataTable Listar(bool VerActivos = true, string FiltroBusqueda = "")
         {
-            //TODO usar SP con parametros para ver proveedores eliminados o activos
+            
             DataTable R = new DataTable();
+
+            Conexion MiCnn = new Conexion();
+
+            MiCnn.ListaParametros.Add(new SqlParameter("@VerActivos", VerActivos)); 
+            MiCnn.ListaParametros.Add(new SqlParameter("@FiltroBusqueda", FiltroBusqueda));
+
+            R = MiCnn.EjecutarSelect("SPUsuariosListar");
+
 
             return R;
         }
 
-        //listar con el bool sin parametros
-        public DataTable ListarInactivos()
-        {
-            //TODO usar SP con parametros para ver proveedores eliminados o activos
-            DataTable R = new DataTable();
-
-            return R;
-        }
 
         public bool ValidarLogin(string NombreUsuario, string Contrasennia)
         {

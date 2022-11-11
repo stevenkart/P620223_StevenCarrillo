@@ -34,6 +34,7 @@ namespace P620223_StevenCarrillo.Formularios
             CargarRolesDeUsuario();
             CargarEmpresas();
             LlenarListaUsuarios();
+            ActivarAgregar();
 
 
         }
@@ -127,7 +128,8 @@ namespace P620223_StevenCarrillo.Formularios
                         {
                             MessageBox.Show("Usuario Agregado Correctamente!!!", " :", MessageBoxButtons.OK);
 
-                            LimpiarForm();
+                            LimpiarTodo();
+                            LlenarListaUsuarios();
                         }
                         else
                         {
@@ -157,7 +159,7 @@ namespace P620223_StevenCarrillo.Formularios
         }
 
         //metodo que valida los campos requerido
-        private bool validarCamposRequeridos()
+        private bool validarCamposRequeridos(bool omitirContrasennia = false)
         {
             bool R = false;
 
@@ -165,12 +167,29 @@ namespace P620223_StevenCarrillo.Formularios
                 !string.IsNullOrEmpty(txtCedula.Text.Trim()) &&
                 !string.IsNullOrEmpty(txtNombreUsuario.Text.Trim()) &&
                 !string.IsNullOrEmpty(txtCorreo.Text.Trim()) &&
-                !string.IsNullOrEmpty(txtContrasennia.Text.Trim()) &&
-                !string.IsNullOrEmpty(txtConfirmContrasennia.Text.Trim()) &&
+                
                 cboxIDUsuarioRol.SelectedIndex > -1 &&
                 cboxEmpresa.SelectedIndex > -1)
             {
-                R = true;
+                if (omitirContrasennia)
+                {
+                    R = true;
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(txtContrasennia.Text.Trim())
+                        //!string.IsNullOrEmpty(txtConfirmContrasennia.Text.Trim())
+                        )
+                    {
+                        R = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Debe digitar la contraseñia", "Error de Validación!", MessageBoxButtons.OK);
+                        txtContrasennia.Focus();
+                        return false; 
+                    }
+                }
             }
             else
             {
@@ -202,12 +221,7 @@ namespace P620223_StevenCarrillo.Formularios
                     txtCorreo.Focus();
                     return false;
                 }
-                if (string.IsNullOrEmpty(txtContrasennia.Text.Trim()))
-                {
-                    MessageBox.Show("Debe digitar la contraseñia", "Error de Validación!", MessageBoxButtons.OK);
-                    txtContrasennia.Focus();
-                    return false;
-                }
+                
                 //validaciones combo box
                 if (cboxIDUsuarioRol.SelectedIndex == -1)
                 {
@@ -227,9 +241,8 @@ namespace P620223_StevenCarrillo.Formularios
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
-            LimpiarForm();
+            LimpiarTodo();
         }
-
         private void LimpiarForm()
         {
             txtCodigo.Clear();
@@ -242,7 +255,65 @@ namespace P620223_StevenCarrillo.Formularios
 
             cboxIDUsuarioRol.SelectedIndex = -1;
             cboxEmpresa.SelectedIndex = -1;
+
         }
+
+        private void dgvLista_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //Cuando se seleciona un item de la lista se deben mostrar los datos en los 
+            //campos del formulario. En este estado se puede cambair la info y actualizar
+            //o eliminar un usuario
+
+            if (dgvLista.SelectedRows.Count == 1)
+            {
+
+
+
+                DataGridViewRow MiFila = dgvLista.SelectedRows[0];
+
+                int IDUsuario = Convert.ToInt32(MiFila.Cells["CIDUsuario"].Value);
+
+                MiUsuarioLocal = new Logica.Models.Usuario();
+
+                MiUsuarioLocal.IDUsuario = IDUsuario;
+
+                //una vez tenemos el valor del IDUsuario, se llama a la funcion 
+                //de consultar por ID que entrega como retorno un objeto de tipo usuario
+                //en este caso voy a reutilizar el objeto de usuario local
+                //para cargar datos por medio de la funcion 
+
+                MiUsuarioLocal = MiUsuarioLocal.ConsultarPorID();
+
+                if (MiUsuarioLocal != null && MiUsuarioLocal.IDUsuario > 0)
+                {
+                    //una vez me asegure que el objeto posee datos, entonces se procede a representar
+                    //en pantalla
+                    txtCodigo.Text = MiUsuarioLocal.IDUsuario.ToString();
+                    txtNombre.Text = MiUsuarioLocal.Nombre.ToString();
+                    txtCedula.Text = MiUsuarioLocal.Cedula.ToString();
+                    txtNombreUsuario.Text = MiUsuarioLocal.NombreUsuario.ToString();
+                    txtContrasennia.Text = MiUsuarioLocal.Contrasennia.ToString();
+                    txtCorreo.Text = MiUsuarioLocal.Email.ToString();
+
+                    cboxIDUsuarioRol.SelectedValue = MiUsuarioLocal.MiUsuarioRol.IDUsuarioRol;
+                    cboxEmpresa.SelectedValue = MiUsuarioLocal.MiEmpresa.IDEmpresa;
+
+                    chActivo.Checked = MiUsuarioLocal.Activo;
+
+                    ActivarModificarEliminar();
+                }
+            }
+        }
+
+        private void LimpiarTodo()
+        {
+            LimpiarForm();
+            dgvLista.ClearSelection();
+            MiUsuarioLocal = new Logica.Models.Usuario();
+            ActivarAgregar();
+        }
+
+
 
         private void txtNombre_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -260,9 +331,6 @@ namespace P620223_StevenCarrillo.Formularios
         {
             e.Handled = Validaciones.CaracteresTexto(e, false, true);
         }
-
-        
-
         private void txtBuscar_TextChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtBuscar.Text.Trim()) && txtBuscar.Text.Count() > 2)
@@ -274,7 +342,6 @@ namespace P620223_StevenCarrillo.Formularios
                 LlenarListaUsuarios();
             }
         }
-
         private void txtCorreo_Leave(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtCorreo.Text.Trim()))
@@ -282,21 +349,149 @@ namespace P620223_StevenCarrillo.Formularios
                 if (!Validaciones.IsValidEmail(txtCorreo.Text.Trim()))
                 {
                     MessageBox.Show("Email ingresado no posee un formato correcto, debe llevar @ y el dominio correspondiente");
-                    txtCorreo.Focus();
+                    //txtCorreo.Focus();
                 }
             }
        
         }
-
         private void txtContrasennia_Leave(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtContrasennia.Text.Trim()))
             {
                 Validaciones.IsValidPass(txtContrasennia.Text.Trim());
-                txtContrasennia.Focus();
+               // txtContrasennia.Focus();
             }
-            
-   
+        }
+
+        private void dgvLista_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            dgvLista.ClearSelection();
+        }
+
+        private void btnModificar_Click(object sender, EventArgs e)
+        {
+
+            //lo primero que se debe hacer es validar que los datos minimos necesario estan compeltos
+
+            if (validarCamposRequeridos(true))//los campos estan completos if its TRUE
+            {
+                MiUsuarioLocal = new Logica.Models.Usuario();
+
+                MiUsuarioLocal.IDUsuario = Convert.ToInt32(txtCodigo.Text.Trim());
+                MiUsuarioLocal.Nombre = txtNombre.Text.Trim();
+                MiUsuarioLocal.Cedula = txtCedula.Text.Trim();
+                MiUsuarioLocal.NombreUsuario = txtNombreUsuario.Text.Trim();
+                MiUsuarioLocal.Email = txtCorreo.Text.Trim();
+                MiUsuarioLocal.Contrasennia = txtContrasennia.Text.Trim();
+                /* Una forma rapida de conversion del cbox
+                MiUsuarioLocal.MiUsuarioRol.IDUsuarioRol = (int)cboxIDUsuarioRol.SelectedValue;
+                MiUsuarioLocal.MiEmpresa.IDEmpresa = (int)cboxEmpresa.SelectedValue;
+                */
+                MiUsuarioLocal.MiUsuarioRol.IDUsuarioRol = Convert.ToInt32(cboxIDUsuarioRol.SelectedValue);
+                MiUsuarioLocal.MiEmpresa.IDEmpresa = Convert.ToInt32(cboxEmpresa.SelectedValue);
+
+
+                if (MiUsuarioLocal.ConsultarPorID(MiUsuarioLocal.IDUsuario))
+                {
+                    DialogResult Respuesta = MessageBox.Show("¿Seguro de Modificar al usuario", "???",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (Respuesta == DialogResult.Yes)
+                    {
+                        if (MiUsuarioLocal.Modificar())
+                        {
+                            MessageBox.Show("Usuario Modificado Correctamente!", ":)",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+                            LimpiarTodo();
+                            LlenarListaUsuarios();
+
+                        }
+                    }
+                }
+            }
+
+        }
+    
+    
+
+        private void ActivarAgregar()
+        {
+            btnAgregar.Enabled = true;
+            btnEliminar.Enabled = false;
+            btnModificar.Enabled = false;
+
+        }
+        private void ActivarModificarEliminar()
+        {
+            btnAgregar.Enabled = false;
+            btnEliminar.Enabled = true;
+            btnModificar.Enabled = true;
+
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+
+            //lo primero que se debe hacer es validar que los datos minimos necesario estan compeltos
+ 
+            MiUsuarioLocal = new Logica.Models.Usuario();
+            MiUsuarioLocal.IDUsuario = Convert.ToInt32(txtCodigo.Text.Trim());
+
+            if (MiUsuarioLocal.ConsultarPorID(MiUsuarioLocal.IDUsuario))
+            {
+                if (chActivos.Checked)
+                {
+                    DialogResult Respuesta = MessageBox.Show("¿Seguro de Eliminar al usuario", "???",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (Respuesta == DialogResult.Yes)
+                    {
+                        if (MiUsuarioLocal.Eliminar())
+                        {
+                            MessageBox.Show("Usuario Se eliminó Correctamente!", ":)",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            LimpiarTodo();
+                            LlenarListaUsuarios();
+
+                        }
+                    }
+                }
+                else
+                {
+                    DialogResult Respuesta = MessageBox.Show("¿Seguro de Activar al usuario", "???",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (Respuesta == DialogResult.Yes)
+                    {
+                        if (MiUsuarioLocal.Activar())
+                        {
+                            MessageBox.Show("Usuario Se Activó Correctamente!", ":)",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            LimpiarTodo();
+                            LlenarListaUsuarios();
+
+                        }
+                    }
+                }
+            }
+        }
+
+        private void chActivos_CheckedChanged(object sender, EventArgs e)
+        {
+            LlenarListaUsuarios();
+
+            if (chActivos.Checked)
+            {
+                btnEliminar.Text = "Eliminar";
+            }
+            else
+            {
+                btnEliminar.Text = "Activar";
+            }
         }
     }
 }

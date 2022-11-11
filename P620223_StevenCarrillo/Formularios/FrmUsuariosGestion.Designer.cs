@@ -141,6 +141,8 @@
             this.dgvLista.Size = new System.Drawing.Size(735, 223);
             this.dgvLista.TabIndex = 3;
             this.dgvLista.VirtualMode = true;
+            this.dgvLista.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvLista_CellClick);
+            this.dgvLista.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvLista_DataBindingComplete);
             // 
             // CIDUsuario
             // 
@@ -227,10 +229,11 @@
             this.chActivos.Location = new System.Drawing.Point(26, 10);
             this.chActivos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chActivos.Name = "chActivos";
-            this.chActivos.Size = new System.Drawing.Size(94, 20);
+            this.chActivos.Size = new System.Drawing.Size(127, 20);
             this.chActivos.TabIndex = 2;
-            this.chActivos.Text = "Ver Activos";
+            this.chActivos.Text = "Usuarios Activos";
             this.chActivos.UseVisualStyleBackColor = true;
+            this.chActivos.CheckedChanged += new System.EventHandler(this.chActivos_CheckedChanged);
             // 
             // panel3
             // 
@@ -302,6 +305,7 @@
             // chActivo
             // 
             this.chActivo.AutoSize = true;
+            this.chActivo.Enabled = false;
             this.chActivo.Location = new System.Drawing.Point(296, 149);
             this.chActivo.Name = "chActivo";
             this.chActivo.Size = new System.Drawing.Size(63, 20);
@@ -532,6 +536,7 @@
             this.btnModificar.TabIndex = 1;
             this.btnModificar.Text = "Modificar";
             this.btnModificar.UseVisualStyleBackColor = false;
+            this.btnModificar.Click += new System.EventHandler(this.btnModificar_Click);
             // 
             // btnEliminar
             // 
@@ -546,6 +551,7 @@
             this.btnEliminar.TabIndex = 2;
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = false;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
             // 
             // btnLimpiar
             // 
