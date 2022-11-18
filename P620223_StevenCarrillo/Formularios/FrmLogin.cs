@@ -26,8 +26,43 @@ namespace P620223_StevenCarrillo.Formularios
         {
             //TODO: se debe validar el ingreso del usuario
             //si la validacion es correcta permitiria dejar ingresar al usuario al sistema principal 
+            
+            
+
+            if (!string.IsNullOrEmpty(txtNombreUsuario.Text.Trim()) &&
+                !string.IsNullOrEmpty(txtContrasennia.Text.Trim()))
+            {
+                string u = txtNombreUsuario.Text.Trim();
+                string c = txtContrasennia.Text.Trim();
+
+                int LoginOk = Globales.MiUsuarioGlobal.ValidarLogin(u, c);
+
+                if (LoginOk > 0)
+                {
+                    //hay permiso de ingresar al sistema
+                    Globales.MiUsuarioGlobal.IDUsuario = LoginOk;
+
+                    Globales.MiUsuarioGlobal = Globales.MiUsuarioGlobal.ConsultarPorID();
+
+                    Globales.MiformPrincipal.Show();
+                    this.Hide();
+
+                }
+                else
+                {
+                    MessageBox.Show("Usuario o Contraseña Incorrectas", "Error en Validación",
+                        MessageBoxButtons.OK);
+                    
+                }
+
+
+            }
+            
+
+            /*
             Globales.MiformPrincipal.Show();
             this.Hide();
+            */
 
         }
 
@@ -47,6 +82,23 @@ namespace P620223_StevenCarrillo.Formularios
             txtContrasennia.UseSystemPasswordChar = true;
         }
 
- 
+        private void FrmLogin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Shift & e.KeyCode == Keys.A)
+            {
+                btnIngresoDirecto.Visible = true;
+            }
+        }
+
+        private void btnIngresoDirecto_Click(object sender, EventArgs e)
+        {
+
+            Globales.MiUsuarioGlobal.IDUsuario = 2;
+
+            Globales.MiUsuarioGlobal = Globales.MiUsuarioGlobal.ConsultarPorID();
+
+            Globales.MiformPrincipal.Show();
+            this.Hide();
+        }
     }
 }

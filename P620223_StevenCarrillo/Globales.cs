@@ -18,8 +18,10 @@ namespace P620223_StevenCarrillo
         public static Form MiformPrincipal = new Formularios.FrmPrincipalMDI();
 
         public static Formularios.FrmUsuariosGestion MiFormMantUsuarios = new Formularios.FrmUsuariosGestion();
+        public static Formularios.FrmFacturacion MiFormFacturas = new Formularios.FrmFacturacion();
 
-
+        public static Logica.Models.Usuario MiUsuarioGlobal = new Logica.Models.Usuario();
+        
 
     }
 }
