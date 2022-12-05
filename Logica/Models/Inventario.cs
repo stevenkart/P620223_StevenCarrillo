@@ -100,8 +100,12 @@ namespace Logica.Models
 
         public DataTable Listar(bool VerActivos = true)
         {
-            //TODO usar SP con parametros para ver proveedores eliminados o activos
+            
             DataTable R = new DataTable();
+
+            Conexion MyCnn = new Conexion();
+
+            R = MyCnn.EjecutarSelect("SPInventarioListar");
 
             return R;
         }
