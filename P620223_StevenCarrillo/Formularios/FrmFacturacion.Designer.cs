@@ -38,7 +38,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtClienteID = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dgvLista = new System.Windows.Forms.DataGridView();
+            this.DgvLista = new System.Windows.Forms.DataGridView();
             this.CIDInventario = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CNombreItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CPrecioVenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -68,7 +68,7 @@
             this.btnAgregar = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLista)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvLista)).BeginInit();
             this.menuStrip2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -180,7 +180,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.dgvLista);
+            this.groupBox2.Controls.Add(this.DgvLista);
             this.groupBox2.Controls.Add(this.menuStrip2);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -192,13 +192,13 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Detalle Items en Factura";
             // 
-            // dgvLista
+            // DgvLista
             // 
-            this.dgvLista.AllowUserToAddRows = false;
-            this.dgvLista.AllowUserToDeleteRows = false;
-            this.dgvLista.BackgroundColor = System.Drawing.SystemColors.ControlLight;
-            this.dgvLista.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvLista.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.DgvLista.AllowUserToAddRows = false;
+            this.DgvLista.AllowUserToDeleteRows = false;
+            this.DgvLista.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.DgvLista.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DgvLista.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.CIDInventario,
             this.CNombreItem,
             this.CPrecioVenta,
@@ -210,67 +210,59 @@
             this.CSubTotal2,
             this.CImpuestosTotal,
             this.CTotalLinea});
-            this.dgvLista.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLista.GridColor = System.Drawing.Color.Gainsboro;
-            this.dgvLista.Location = new System.Drawing.Point(3, 41);
-            this.dgvLista.Name = "dgvLista";
-            this.dgvLista.ReadOnly = true;
-            this.dgvLista.RowHeadersVisible = false;
-            this.dgvLista.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLista.Size = new System.Drawing.Size(771, 191);
-            this.dgvLista.TabIndex = 1;
-            this.dgvLista.VirtualMode = true;
+            this.DgvLista.GridColor = System.Drawing.Color.Gainsboro;
+            this.DgvLista.Location = new System.Drawing.Point(3, 41);
+            this.DgvLista.Name = "DgvLista";
+            this.DgvLista.ReadOnly = true;
+            this.DgvLista.RowHeadersVisible = false;
+            this.DgvLista.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DgvLista.Size = new System.Drawing.Size(771, 191);
+            this.DgvLista.TabIndex = 1;
+            this.DgvLista.VirtualMode = true;
             // 
             // CIDInventario
             // 
-            this.CIDInventario.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.CIDInventario.DataPropertyName = "IDInventario";
-            this.CIDInventario.HeaderText = "COD.";
+            this.CIDInventario.HeaderText = "Cod.";
             this.CIDInventario.Name = "CIDInventario";
             this.CIDInventario.ReadOnly = true;
-            this.CIDInventario.Width = 70;
             // 
             // CNombreItem
             // 
             this.CNombreItem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.CNombreItem.DataPropertyName = "NombreItem";
-            this.CNombreItem.HeaderText = "Item";
+            this.CNombreItem.HeaderText = "Producto";
             this.CNombreItem.Name = "CNombreItem";
             this.CNombreItem.ReadOnly = true;
             // 
             // CPrecioVenta
             // 
             this.CPrecioVenta.DataPropertyName = "PrecioVenta";
-            this.CPrecioVenta.HeaderText = "Precio Venta";
+            this.CPrecioVenta.HeaderText = "Precio";
             this.CPrecioVenta.Name = "CPrecioVenta";
             this.CPrecioVenta.ReadOnly = true;
             // 
             // CCantidad
             // 
-            this.CCantidad.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.CCantidad.DataPropertyName = "Cantidad";
-            this.CCantidad.HeaderText = "Cant";
+            this.CCantidad.HeaderText = "Cant.";
             this.CCantidad.Name = "CCantidad";
             this.CCantidad.ReadOnly = true;
-            this.CCantidad.Width = 70;
             // 
             // CTasaImpuesto
             // 
-            this.CTasaImpuesto.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.CTasaImpuesto.DataPropertyName = "TasaImpuesto";
             this.CTasaImpuesto.HeaderText = "% IVA";
             this.CTasaImpuesto.Name = "CTasaImpuesto";
             this.CTasaImpuesto.ReadOnly = true;
-            this.CTasaImpuesto.Width = 85;
             // 
             // CPorcentajeDescuento
             // 
-            this.CPorcentajeDescuento.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.CPorcentajeDescuento.DataPropertyName = "PorcentajeDescuento";
-            this.CPorcentajeDescuento.HeaderText = "% Desc.";
+            this.CPorcentajeDescuento.HeaderText = "PorcentajeDescuento";
             this.CPorcentajeDescuento.Name = "CPorcentajeDescuento";
             this.CPorcentajeDescuento.ReadOnly = true;
-            this.CPorcentajeDescuento.Width = 70;
+            this.CPorcentajeDescuento.Visible = false;
             // 
             // CSubTotal
             // 
@@ -278,11 +270,12 @@
             this.CSubTotal.HeaderText = "SubTotal";
             this.CSubTotal.Name = "CSubTotal";
             this.CSubTotal.ReadOnly = true;
+            this.CSubTotal.Visible = false;
             // 
             // CDescuentoTotal
             // 
             this.CDescuentoTotal.DataPropertyName = "DescuentoTotal";
-            this.CDescuentoTotal.HeaderText = "Desc. Total";
+            this.CDescuentoTotal.HeaderText = "DescuentoTotal";
             this.CDescuentoTotal.Name = "CDescuentoTotal";
             this.CDescuentoTotal.ReadOnly = true;
             this.CDescuentoTotal.Visible = false;
@@ -298,7 +291,7 @@
             // CImpuestosTotal
             // 
             this.CImpuestosTotal.DataPropertyName = "ImpuestosTotal";
-            this.CImpuestosTotal.HeaderText = "Impuestos Total";
+            this.CImpuestosTotal.HeaderText = "ImpuestosTotal";
             this.CImpuestosTotal.Name = "CImpuestosTotal";
             this.CImpuestosTotal.ReadOnly = true;
             this.CImpuestosTotal.Visible = false;
@@ -306,9 +299,10 @@
             // CTotalLinea
             // 
             this.CTotalLinea.DataPropertyName = "TotalLinea";
-            this.CTotalLinea.HeaderText = "Total";
+            this.CTotalLinea.HeaderText = "TotalLinea";
             this.CTotalLinea.Name = "CTotalLinea";
             this.CTotalLinea.ReadOnly = true;
+            this.CTotalLinea.Visible = false;
             // 
             // menuStrip2
             // 
@@ -505,6 +499,7 @@
             this.btnAgregar.TabIndex = 0;
             this.btnAgregar.Text = "Generar Factura";
             this.btnAgregar.UseVisualStyleBackColor = false;
+            this.btnAgregar.Click += new System.EventHandler(this.btnAgregar_Click);
             // 
             // FrmFacturacion
             // 
@@ -527,7 +522,7 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLista)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvLista)).EndInit();
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -553,7 +548,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuAgregarProducto;
         private System.Windows.Forms.ToolStripMenuItem mnuModificarProducto;
         private System.Windows.Forms.ToolStripMenuItem mnuQuitarProducto;
-        private System.Windows.Forms.DataGridView dgvLista;
+        private System.Windows.Forms.DataGridView DgvLista;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;

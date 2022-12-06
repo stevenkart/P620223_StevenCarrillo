@@ -22,11 +22,7 @@ namespace P620223_StevenCarrillo
         public static Formularios.FrmUsuariosGestion MiFormMantUsuarios = new Formularios.FrmUsuariosGestion();
         public static Formularios.FrmFacturacion MiFormFacturas = new Formularios.FrmFacturacion();
 
-        public static Formularios.FrmFacturacion MiFormFacturacion = new Formularios.FrmFacturacion();
-        public static Formularios.FrmClienteBuscar MiFormBuscarCliente = new Formularios.FrmClienteBuscar();
-
-
-
+     
 
     }
 }
